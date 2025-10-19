@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run type checking and build before push
+echo "Running type check..."
+npx tsc --noEmit
+
+echo "Running build..."
+npm run build
