@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { X, Send, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useFormContext } from "react-hook-form";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Message {
   id: string;
@@ -193,7 +195,24 @@ export default function ChatBot({
                   : "bg-secondary text-foreground border border-border"
               }`}
             >
-              <p className="text-sm leading-relaxed">{message.content}</p>
+              {message.role === "assistant" ? (
+                <div className="prose prose-sm prose-neutral dark:prose-invert max-w-none
+                  prose-p:text-sm prose-p:leading-relaxed prose-p:my-2
+                  prose-headings:text-sm prose-headings:font-semibold prose-headings:my-2
+                  prose-ul:my-2 prose-ol:my-2 prose-li:text-sm prose-li:my-1
+                  prose-code:text-xs prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-['']
+                  prose-pre:text-xs prose-pre:my-2 prose-pre:bg-muted prose-pre:p-2 prose-pre:rounded
+                  prose-a:text-accent prose-a:no-underline hover:prose-a:underline
+                  prose-strong:font-semibold prose-strong:text-foreground
+                  prose-blockquote:border-l-2 prose-blockquote:border-accent prose-blockquote:pl-3 prose-blockquote:my-2"
+                >
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {message.content}
+                  </ReactMarkdown>
+                </div>
+              ) : (
+                <p className="text-sm leading-relaxed">{message.content}</p>
+              )}
             </div>
           </div>
         ))}

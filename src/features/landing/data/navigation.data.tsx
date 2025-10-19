@@ -26,25 +26,25 @@ const NavigationData = ({
       ),
       onClick: () => onContentFilter("blogs"),
     },
-    {
-      id: "projects",
-      title: "Projects",
-      type: "button",
-      icon: (
-        <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      onClick: () => onContentFilter("projects"),
-    },
+    // {
+    //   id: "projects",
+    //   title: "Projects",
+    //   type: "button",
+    //   icon: (
+    //     <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+    //   ),
+    //   onClick: () => onContentFilter("projects"),
+    // },
 
-    {
-      id: "tools",
-      title: "Tools",
-      type: "button",
-      icon: (
-        <Wrench className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      onClick: () => onContentFilter("tools"),
-    },
+    // {
+    //   id: "tools",
+    //   title: "Tools",
+    //   type: "button",
+    //   icon: (
+    //     <Wrench className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+    //   ),
+    //   onClick: () => onContentFilter("tools"),
+    // },
     {
       id: "search",
       title: "Search",
