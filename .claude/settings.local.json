@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(del \"src\\components\\modules\\right-panel\\free-space-cards.tsx\")",
+      "Bash(del \"src\\components\\ui\\focus-cards.tsx\")",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(mkdir:*)",
+      "Bash(move \"d:\\Projects\\Web2\\Personal\\real-portfolio-wtf\\src\\features\\blog\\data\\what-is-generative-ai.md\" \"d:\\Projects\\Web2\\Personal\\real-portfolio-wtf\\content\\blogs\\what-is-generative-ai.md\")",
+      "Bash(timeout /t 30)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
