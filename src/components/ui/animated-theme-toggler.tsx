@@ -35,6 +35,7 @@ export const AnimatedThemeToggler = ({
     // Preload the audio
     audioRef.current = new Audio("/assets/sounds/light-switch-on-382714.mp3");
     audioRef.current.preload = "auto";
+    audioRef.current.volume = 0.3; // Set volume to 50%
 
     return () => {
       observer.disconnect();

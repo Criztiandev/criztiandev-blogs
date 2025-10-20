@@ -2,28 +2,29 @@
 
 import { useState, useEffect } from "react";
 
-export function useLoading(initialDelay = 100) {
+export function useLoading() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    // Check if this is the first load
-    const hasLoaded = sessionStorage.getItem("hasLoadedBefore");
-
-    if (hasLoaded) {
-      // Skip loading screen on subsequent navigations
-      setIsLoading(false);
-      setIsInitialLoad(false);
-    } else {
-      // Show loading screen on first load
-      const timer = setTimeout(() => {
+    // Hide loading when page is fully loaded and hydrated
+    const handleLoad = () => {
+      // Small delay for smooth transition
+      setTimeout(() => {
         setIsLoading(false);
-        sessionStorage.setItem("hasLoadedBefore", "true");
-      }, initialDelay);
+      }, 300);
+    };
 
-      return () => clearTimeout(timer);
+    // Check if already loaded
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
     }
-  }, [initialDelay]);
 
-  return { isLoading: isLoading && isInitialLoad, isInitialLoad };
+    return () => {
+      window.removeEventListener("load", handleLoad);
+    };
+  }, []);
+
+  return { isLoading };
 }

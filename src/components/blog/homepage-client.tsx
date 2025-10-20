@@ -114,9 +114,66 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
 
   return (
     <>
-      <main className="h-screen">
-        <div className="grid h-full grid-cols-[20%_auto]">
-          <div className="flex flex-col items-center justify-between p-8">
+      <main className="h-screen overflow-auto lg:overflow-hidden">
+        {/* Mobile Header - Show on mobile/tablet only */}
+        <header className="bg-background/80 fixed top-0 right-0 left-0 z-40 border-b px-4 py-3 backdrop-blur-md lg:hidden">
+          <div className="flex items-center justify-between">
+            <span className="font-permanent-marker text-2xl font-bold">Criz</span>
+            <AnimatedThemeToggler defaultValue="" />
+          </div>
+        </header>
+
+        {/* Mobile/Tablet Hero Section - Show on mobile/tablet only */}
+        <section className="bg-background border-b px-6 py-12 pt-16 lg:hidden">
+          <div className="mx-auto max-w-2xl space-y-8">
+            {/* Title */}
+            <h1 className="font-permanent-marker text-5xl font-bold sm:hidden sm:text-6xl">Criz</h1>
+
+            {/* Bio */}
+            <p className="text-muted-foreground text-base leading-relaxed sm:text-lg">
+              Hi, Im Criztian a Full Stack Developer focused on building scalable web and mobile
+              apps with MERN, React Native, Laravel, and Generative AI. I collaborate with diverse
+              teams to create impactful products that solve real problems with excellent user
+              experiences.
+            </p>
+
+            {/* Skills */}
+            <div className="flex flex-wrap gap-2">
+              {SKILL_SET.map((items) => (
+                <Badge
+                  key={items}
+                  variant="outline"
+                  className="text-muted-foreground rounded-full px-3 py-1 text-sm"
+                >
+                  {items}
+                </Badge>
+              ))}
+            </div>
+
+            {/* Newsletter */}
+            <NewsLetterModal />
+
+            {/* Socials */}
+            <div className="flex items-center justify-between border-t pt-4">
+              <span className="text-muted-foreground text-sm">@criztiandev</span>
+              <div className="flex gap-3">
+                {SOCIALS_DATA.map((social) => (
+                  <Link
+                    key={social.id}
+                    href={social.href}
+                    className="hover:text-primary transition-colors"
+                  >
+                    {social.icon}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="grid h-full grid-cols-1 lg:h-screen lg:grid-cols-[20%_auto]">
+          {/* Desktop Sidebar */}
+          <div className="hidden flex-col items-center justify-between p-8 lg:flex">
             <header className="mt-12 flex flex-col gap-12">
               <div className="flex items-center justify-between">
                 <span className="font-permanent-marker text-4xl font-bold">Criz</span>
@@ -161,21 +218,27 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
           <div className="relative">
             <div
               className={cn(
-                "h-screen w-full border",
+                "min-h-screen w-full border lg:h-screen",
                 "[background-size:40px_40px]",
                 "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
                 "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]"
               )}
             >
+              {/* Free Space Layout - Desktop only (≥1024px) when layoutMode is "free-space" */}
               <div
-                className={cn("h-full w-full", layoutMode === "free-space" ? "block" : "hidden")}
+                className={cn(
+                  "h-full w-full",
+                  layoutMode === "free-space" ? "hidden lg:block" : "hidden"
+                )}
               >
                 <DraggableLayout payload={blogPosts} />
               </div>
+
+              {/* Grid Layout - Always show on mobile/tablet (<1024px), or when layoutMode is "grid" on desktop */}
               <div
                 className={cn(
                   "h-full w-full overflow-auto",
-                  layoutMode === "grid" ? "block" : "hidden"
+                  layoutMode === "grid" ? "block" : "block lg:hidden"
                 )}
               >
                 <GridLayout cards={blogPosts} />

@@ -9,7 +9,8 @@
       "Bash(move \"d:\\Projects\\Web2\\Personal\\real-portfolio-wtf\\src\\features\\blog\\data\\what-is-generative-ai.md\" \"d:\\Projects\\Web2\\Personal\\real-portfolio-wtf\\content\\blogs\\what-is-generative-ai.md\")",
       "Bash(timeout /t 30)",
       "Bash(npx husky init)",
-      "Bash(npx tsc --noEmit)"
+      "Bash(npx tsc --noEmit)",
+      "Bash(del \"d:\\Projects\\Web2\\Personal\\real-portfolio-wtf\\src\\components\\blog\\chat-bot.tsx\")"
     ],
     "deny": [],
     "ask": []
