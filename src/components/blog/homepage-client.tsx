@@ -6,7 +6,6 @@ import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { Badge } from "@/components/ui/badge";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { GridLayout } from "@/components/ui/grid-layout";
-import { ShinyButton } from "@/components/ui/shiny-button";
 import NAVIGATION_LINKS from "@/features/landing/data/navigation.data";
 import { SKILL_SET } from "@/features/landing/data/skillset.data";
 import SOCIALS_DATA from "@/features/landing/data/socials.data";
@@ -25,12 +24,8 @@ interface HomePageClientProps {
 }
 
 export default function HomePageClient({ initialData }: HomePageClientProps) {
-  const [layoutMode, setLayoutMode] = useState<"free-space" | "grid">(
-    "free-space"
-  );
-  const [contentFilter, setContentFilter] = useState<"blogs" | "projects">(
-    "blogs"
-  );
+  const [layoutMode, setLayoutMode] = useState<"free-space" | "grid">("free-space");
+  const [contentFilter, setContentFilter] = useState<"blogs" | "projects" | "tools">("blogs");
   const [isSearchbarModalOpen, setIsSearchbarModalOpen] = useState(false);
 
   // tRPC infinite query with SSR initialData
@@ -86,7 +81,7 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
     setLayoutMode((prev) => (prev === "free-space" ? "grid" : "free-space"));
   }, []);
 
-  const handleContentFilter = useCallback((filter: "blogs" | "projects") => {
+  const handleContentFilter = useCallback((filter: "blogs" | "projects" | "tools") => {
     setContentFilter(filter);
   }, []);
 
@@ -119,43 +114,38 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
 
   return (
     <>
-      <main className="h-screen ">
-        <div className="grid grid-cols-[20%_auto] h-full">
-          <div className="p-8 flex flex-col justify-between items-center">
-            <header className="flex flex-col gap-12 mt-12">
-              <div className="flex justify-between items-center">
-                <span className="text-4xl font-bold font-permanent-marker">
-                  Criz
-                </span>
+      <main className="h-screen">
+        <div className="grid h-full grid-cols-[20%_auto]">
+          <div className="flex flex-col items-center justify-between p-8">
+            <header className="mt-12 flex flex-col gap-12">
+              <div className="flex items-center justify-between">
+                <span className="font-permanent-marker text-4xl font-bold">Criz</span>
                 <AnimatedThemeToggler defaultValue="" />
               </div>
 
               <p className="text-muted-foreground">
-                Hi, Im Criztian a Full Stack Developer focused on building
-                scalable web and mobile apps with MERN, React Native, Laravel,
-                and Generative AI. I collaborate with diverse teams to create
-                impactful products that solve real problems with excellent user
+                Hi, Im Criztian a Full Stack Developer focused on building scalable web and mobile
+                apps with MERN, React Native, Laravel, and Generative AI. I collaborate with diverse
+                teams to create impactful products that solve real problems with excellent user
                 experiences.
               </p>
 
-              <div className="flex flex-wrap  gap-2">
+              <div className="flex flex-wrap gap-2">
                 {SKILL_SET.map((items) => (
                   <Badge
                     key={items}
                     variant="outline"
-                    className=" text-md px-4 py-2 rounded-full text-muted-foreground"
+                    className="text-md text-muted-foreground rounded-full px-4 py-2"
                   >
                     {items}
                   </Badge>
                 ))}
               </div>
 
-             
-      <NewsLetterModal />
-
+              <NewsLetterModal />
             </header>
 
-            <footer className="flex justify-between items-center w-full ">
+            <footer className="flex w-full items-center justify-between">
               <span className="text-muted-foreground">@criztiandev</span>
 
               <div className="flex gap-2">
@@ -171,23 +161,20 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
           <div className="relative">
             <div
               className={cn(
-                "w-full h-screen border",
+                "h-screen w-full border",
                 "[background-size:40px_40px]",
                 "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
                 "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]"
               )}
             >
               <div
-                className={cn(
-                  "w-full h-full",
-                  layoutMode === "free-space" ? "block" : "hidden"
-                )}
+                className={cn("h-full w-full", layoutMode === "free-space" ? "block" : "hidden")}
               >
                 <DraggableLayout payload={blogPosts} />
               </div>
               <div
                 className={cn(
-                  "w-full h-full overflow-auto",
+                  "h-full w-full overflow-auto",
                   layoutMode === "grid" ? "block" : "hidden"
                 )}
               >
@@ -195,23 +182,16 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
 
                 {/* Loading states */}
                 {isLoading && (
-                  <div className="flex justify-center items-center p-8">
-                    <div className="text-muted-foreground">
-                      Loading blogs...
-                    </div>
+                  <div className="flex items-center justify-center p-8">
+                    <div className="text-muted-foreground">Loading blogs...</div>
                   </div>
                 )}
 
                 {/* Intersection observer target for infinite scroll */}
                 {layoutMode === "grid" && hasNextPage && (
-                  <div
-                    ref={observerRef}
-                    className="flex justify-center items-center p-8"
-                  >
+                  <div ref={observerRef} className="flex items-center justify-center p-8">
                     {isFetchingNextPage ? (
-                      <div className="text-muted-foreground">
-                        Loading more...
-                      </div>
+                      <div className="text-muted-foreground">Loading more...</div>
                     ) : (
                       <div className="h-20" />
                     )}
@@ -220,18 +200,14 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
               </div>
             </div>
 
-            <div className="absolute left-0 right-0 bottom-0 flex justify-center items-center p-4">
+            <div className="absolute right-0 bottom-0 left-0 flex items-center justify-center p-4">
               <FloatingDock selectedItem={contentFilter} items={dockLinks} />
             </div>
           </div>
         </div>
       </main>
 
-      <SearchModal
-        isOpen={isSearchbarModalOpen}
-        setIsOpen={setIsSearchbarModalOpen}
-      />
-
+      <SearchModal isOpen={isSearchbarModalOpen} setIsOpen={setIsSearchbarModalOpen} />
     </>
   );
 }

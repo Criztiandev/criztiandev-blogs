@@ -6,8 +6,7 @@ import { flushSync } from "react-dom";
 
 import { cn } from "@/lib/utils";
 
-interface AnimatedThemeTogglerProps
-  extends React.ComponentPropsWithoutRef<"button"> {
+interface AnimatedThemeTogglerProps extends React.ComponentPropsWithoutRef<"button"> {
   duration?: number;
 }
 
@@ -49,6 +48,8 @@ export const AnimatedThemeToggler = ({
   const toggleTheme = useCallback(async () => {
     if (!buttonRef.current || !audioRef.current) return;
 
+    const audio = audioRef.current;
+
     await document.startViewTransition(() => {
       flushSync(() => {
         const newTheme = !isDark;
@@ -56,15 +57,16 @@ export const AnimatedThemeToggler = ({
         document.documentElement.classList.toggle("dark");
         localStorage.setItem("theme", newTheme ? "dark" : "light");
 
-        audioRef.current.currentTime = 0;
-        audioRef.current.play().catch((error) => {
-          console.warn("Audio playback failed:", error); // Handle any errors, e.g., autoplay policy
-        });
+        if (audio) {
+          audio.currentTime = 0;
+          audio.play().catch((error) => {
+            console.warn("Audio playback failed:", error); // Handle any errors, e.g., autoplay policy
+          });
+        }
       });
     }).ready;
 
-    const { top, left, width, height } =
-      buttonRef.current.getBoundingClientRect();
+    const { top, left, width, height } = buttonRef.current.getBoundingClientRect();
     const x = left + width / 2;
     const y = top + height / 2;
     const maxRadius = Math.hypot(
@@ -74,10 +76,7 @@ export const AnimatedThemeToggler = ({
 
     document.documentElement.animate(
       {
-        clipPath: [
-          `circle(0px at ${x}px ${y}px)`,
-          `circle(${maxRadius}px at ${x}px ${y}px)`,
-        ],
+        clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${maxRadius}px at ${x}px ${y}px)`],
       },
       {
         duration,
@@ -88,12 +87,7 @@ export const AnimatedThemeToggler = ({
   }, [isDark, duration]);
 
   return (
-    <button
-      ref={buttonRef}
-      onClick={toggleTheme}
-      className={cn(className)}
-      {...props}
-    >
+    <button ref={buttonRef} onClick={toggleTheme} className={cn(className)} {...props}>
       {isDark ? <Sun /> : <Moon />}
       <span className="sr-only">Toggle theme</span>
     </button>
