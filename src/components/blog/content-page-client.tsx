@@ -107,9 +107,9 @@ export default function ContentPageClient({
         description: post.description,
         tags: post.tags || [],
         date: post.date || "",
-        type: type, // Add type for routing
+        type: type,
         responsibilities: [],
-        htmlContent: "",
+        htmlContent: post.htmlContent || "",
       }))
     ) || [];
 

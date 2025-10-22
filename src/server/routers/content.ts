@@ -1,11 +1,6 @@
 import { z } from "zod";
 import { router, publicProcedure } from "../trpc";
-import {
-  getContentByType,
-  getContentBySlug,
-  getContentBySlugWithHTML,
-  type ContentType,
-} from "@/lib/content/get-content";
+import { getContentByType, getContentBySlug, type ContentType } from "@/lib/content/get-content";
 
 const contentTypeSchema = z.enum(["blog", "project", "aboutme"]);
 
@@ -32,29 +27,10 @@ export const contentRouter = router({
       const end = start + limit;
 
       const items = sortedPosts.slice(start, end);
-
-      const itemsWithContent =
-        type === "aboutme"
-          ? await Promise.all(
-              items.map(async (item) => {
-                try {
-                  const fullPost = await getContentBySlugWithHTML(type as ContentType, item.slug);
-                  return {
-                    ...item,
-                    htmlContent: fullPost.htmlContent,
-                  };
-                } catch (error) {
-                  console.error(`Error loading content for ${item.slug}:`, error);
-                  return item;
-                }
-              })
-            )
-          : items;
-
       const nextCursor = end < sortedPosts.length ? end : undefined;
 
       return {
-        items: itemsWithContent,
+        items,
         nextCursor,
       };
     }),
