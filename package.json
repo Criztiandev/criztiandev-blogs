@@ -13,7 +13,9 @@
     "type-check": "tsc --noEmit",
     "validate": "npm run type-check && npm run lint && npm run format:check",
     "new-blog": "node scripts/create-blog.js",
-    "prepare": "husky"
+    "new-project": "node scripts/create-project.js",
+    "prepare": "husky",
+    "new-aboutme": "node scripts/create-aboutme.js"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.52",
@@ -50,6 +52,8 @@
     "@trpc/next": "^11.6.0",
     "@trpc/react-query": "^11.6.0",
     "@trpc/server": "^11.6.0",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "ai": "^5.0.76",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -63,6 +67,7 @@
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "next": "15.5.6",
+    "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",
     "react": "19.1.0",

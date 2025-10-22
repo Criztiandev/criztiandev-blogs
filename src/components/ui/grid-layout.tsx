@@ -12,15 +12,34 @@ type CardType = {
   description?: string;
   tags?: string[];
   date?: string;
+  type?: "blog" | "project" | "aboutme";
 };
 
-export function GridLayout({ cards }: { cards: CardType[] }) {
+interface GridLayoutProps {
+  cards: CardType[];
+  type?: "blog" | "project" | "aboutme";
+  CardComponent?: React.ComponentType<{
+    id: string;
+    slug: string;
+    title: string;
+    description?: string;
+    image: string;
+    tags?: string[];
+    date?: string;
+    index: number;
+    type: "blog" | "project" | "aboutme";
+  }>;
+}
+
+export function GridLayout({ cards, type, CardComponent }: GridLayoutProps) {
+  const Card = CardComponent || AnimatedBlogCard;
+
   return (
-    <ScrollArea className="w-full h-full">
+    <ScrollArea className="h-full w-full">
       <div className="p-8 pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {cards.map((card, index) => (
-            <AnimatedBlogCard
+            <Card
               key={card.id}
               id={card.id}
               slug={card.slug || card.id}
@@ -30,6 +49,7 @@ export function GridLayout({ cards }: { cards: CardType[] }) {
               tags={card.tags}
               date={card.date}
               index={index}
+              type={type || card.type || "blog"}
             />
           ))}
         </div>

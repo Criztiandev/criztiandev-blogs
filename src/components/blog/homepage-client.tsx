@@ -13,19 +13,18 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
-import type { BlogPost } from "@/lib/blog/get-blog-content";
+import type { ContentPost } from "@/lib/content/get-content";
 import NewsLetterModal from "../modules/modals/news-letter-modal";
 
 interface HomePageClientProps {
   initialData: {
-    items: BlogPost[];
+    items: ContentPost[];
     nextCursor?: number;
   };
 }
 
 export default function HomePageClient({ initialData }: HomePageClientProps) {
   const [layoutMode, setLayoutMode] = useState<"free-space" | "grid">("free-space");
-  const [contentFilter, setContentFilter] = useState<"blogs" | "projects" | "tools">("blogs");
   const [isSearchbarModalOpen, setIsSearchbarModalOpen] = useState(false);
 
   // tRPC infinite query with SSR initialData
@@ -81,10 +80,6 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
     setLayoutMode((prev) => (prev === "free-space" ? "grid" : "free-space"));
   }, []);
 
-  const handleContentFilter = useCallback((filter: "blogs" | "projects" | "tools") => {
-    setContentFilter(filter);
-  }, []);
-
   const handleSearch = useCallback(() => {
     setIsSearchbarModalOpen((prev) => !prev);
   }, []);
@@ -106,10 +101,8 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
   // Generate dock links based on current state
   const dockLinks = NAVIGATION_LINKS({
     onLayoutToggle: handleLayoutToggle,
-    onContentFilter: handleContentFilter,
     onSearch: handleSearch,
     layoutMode,
-    contentFilter,
   });
 
   return (
@@ -264,7 +257,7 @@ export default function HomePageClient({ initialData }: HomePageClientProps) {
             </div>
 
             <div className="absolute right-0 bottom-0 left-0 flex items-center justify-center p-4">
-              <FloatingDock selectedItem={contentFilter} items={dockLinks} />
+              <FloatingDock selectedItem="blogs" items={dockLinks} />
             </div>
           </div>
         </div>

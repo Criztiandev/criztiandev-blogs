@@ -221,68 +221,70 @@ export default function AIChatButton({ blogContent, blogTitle }: AIChatButtonPro
             </div>
 
             {/* Messages - Using ScrollArea */}
-            <ScrollArea className="flex-1 px-6 py-4">
-              {messages.length === 0 ? (
-                <div className="flex h-full flex-col items-center justify-center py-12 text-center">
-                  <Sparkles className="text-muted-foreground/20 mb-4 h-12 w-12" />
-                  <p className="text-foreground text-base font-medium">No messages yet</p>
-                  <p className="text-muted-foreground mt-2 max-w-sm text-sm">
-                    Ask me to summarize this blog, explain concepts, or answer questions about the
-                    content.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-6 pb-4">
-                  {messages.map((message, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className={cn(
-                        "flex w-full",
-                        message.role === "user" ? "justify-end" : "justify-start"
-                      )}
-                    >
-                      <div
+            <ScrollArea className="flex-1">
+              <div className="h-full min-h-0 px-6 py-4">
+                {messages.length === 0 ? (
+                  <div className="flex h-full flex-col items-center justify-center py-12 text-center">
+                    <Sparkles className="text-muted-foreground/20 mb-4 h-12 w-12" />
+                    <p className="text-foreground text-base font-medium">No messages yet</p>
+                    <p className="text-muted-foreground mt-2 max-w-sm text-sm">
+                      Ask me to summarize this blog, explain concepts, or answer questions about the
+                      content.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-6 pb-4">
+                    {messages.map((message, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2 }}
                         className={cn(
-                          "max-w-[85%] rounded-2xl px-4 py-3",
-                          message.role === "user"
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted/50 text-foreground"
+                          "flex w-full",
+                          message.role === "user" ? "justify-end" : "justify-start"
                         )}
                       >
-                        {message.role === "assistant" ? (
-                          <div className="prose prose-sm prose-neutral dark:prose-invert prose-p:my-2 prose-p:leading-relaxed prose-headings:my-2 prose-headings:font-semibold prose-ul:my-2 prose-ol:my-2 prose-li:my-1 prose-code:text-xs prose-code:bg-background/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-pre:my-2 prose-pre:bg-background prose-pre:text-xs prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:font-semibold max-w-none">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        <div
+                          className={cn(
+                            "max-w-[85%] rounded-2xl px-4 py-3",
+                            message.role === "user"
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted/50 text-foreground"
+                          )}
+                        >
+                          {message.role === "assistant" ? (
+                            <div className="prose prose-sm prose-neutral dark:prose-invert prose-p:my-3 prose-p:leading-relaxed prose-headings:my-3 prose-headings:font-semibold prose-ul:my-3 prose-ol:my-3 prose-li:my-1.5 prose-code:text-xs prose-code:bg-background/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-pre:my-3 prose-pre:bg-background prose-pre:text-xs prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:font-semibold max-w-none">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {message.content}
+                              </ReactMarkdown>
+                            </div>
+                          ) : (
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap">
                               {message.content}
-                            </ReactMarkdown>
-                          </div>
-                        ) : (
-                          <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                            {message.content}
-                          </p>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
+                            </p>
+                          )}
+                        </div>
+                      </motion.div>
+                    ))}
 
-                  {isStreaming && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="flex justify-start"
-                    >
-                      <div className="bg-muted/50 flex items-center gap-2 rounded-2xl px-4 py-3">
-                        <Loader2 className="text-muted-foreground h-4 w-4 animate-spin" />
-                        <span className="text-muted-foreground text-sm">Thinking...</span>
-                      </div>
-                    </motion.div>
-                  )}
+                    {isStreaming && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="flex justify-start"
+                      >
+                        <div className="bg-muted/50 flex items-center gap-2 rounded-2xl px-4 py-3">
+                          <Loader2 className="text-muted-foreground h-4 w-4 animate-spin" />
+                          <span className="text-muted-foreground text-sm">Thinking...</span>
+                        </div>
+                      </motion.div>
+                    )}
 
-                  <div ref={messagesEndRef} />
-                </div>
-              )}
+                    <div ref={messagesEndRef} />
+                  </div>
+                )}
+              </div>
             </ScrollArea>
 
             {/* Input */}

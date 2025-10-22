@@ -26,9 +26,9 @@ interface BlogDetailClientProps {
 
 export function BlogDetailClient({ slug, initialData }: BlogDetailClientProps) {
   const { data } = trpc.blog.getBySlug.useQuery(
-    { slug },
+    { slug, type: "blog" },
     {
-      initialData,
+      initialData: { ...initialData, type: "blog" as const },
       staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
     }
   );
@@ -174,16 +174,47 @@ export function BlogDetailClient({ slug, initialData }: BlogDetailClientProps) {
                     <ol className="my-6 ml-6 list-outside list-decimal space-y-3">{children}</ol>
                   ),
                   li: ({ children }) => <li className="pl-2 text-base leading-7">{children}</li>,
-                  a: ({ href, children }) => (
-                    <a
-                      href={href}
-                      className="text-primary font-medium no-underline hover:underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {children}
-                    </a>
-                  ),
+                  a: ({ href, children }) => {
+                    // Check if it's a YouTube link
+                    if (
+                      href &&
+                      (href.includes("youtube.com/watch") || href.includes("youtu.be/"))
+                    ) {
+                      let videoId = "";
+
+                      if (href.includes("youtube.com/watch")) {
+                        const url = new URL(href);
+                        videoId = url.searchParams.get("v") || "";
+                      } else if (href.includes("youtu.be/")) {
+                        videoId = href.split("youtu.be/")[1]?.split("?")[0] || "";
+                      }
+
+                      if (videoId) {
+                        return (
+                          <div className="my-6 aspect-video w-full">
+                            <iframe
+                              src={`https://www.youtube.com/embed/${videoId}`}
+                              className="h-full w-full rounded-lg"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title="YouTube video"
+                            />
+                          </div>
+                        );
+                      }
+                    }
+
+                    return (
+                      <a
+                        href={href}
+                        className="text-primary font-medium no-underline hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {children}
+                      </a>
+                    );
+                  },
                   img: ({ src, alt }) => {
                     if (typeof src !== "string") return null;
                     return (

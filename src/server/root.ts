@@ -1,5 +1,5 @@
 import { router } from "./trpc";
-import { blogRouter } from "./routers/blog";
+import { contentRouter, blogRouter } from "./routers/content";
 import { aiRouter } from "./routers/ai";
 
 /**
@@ -7,7 +7,8 @@ import { aiRouter } from "./routers/ai";
  * Combines all sub-routers
  */
 export const appRouter = router({
-  blog: blogRouter,
+  content: contentRouter,
+  blog: blogRouter, // Backward compatibility alias
   ai: aiRouter,
 });
 

@@ -2,6 +2,38 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL RULES - READ FIRST
+
+### NEVER TOUCH LAYOUTS, STYLING, OR UI POSITIONING
+
+**ABSOLUTELY FORBIDDEN:**
+
+- ❌ **DO NOT** modify any layout components or their positioning logic
+- ❌ **DO NOT** change CSS classes, Tailwind utilities, or positioning styles
+- ❌ **DO NOT** alter draggable card positions, grid layouts, or component arrangements
+- ❌ **DO NOT** rewrite page components that control visual layout
+- ❌ **DO NOT** change animation configurations or transitions
+- ❌ **DO NOT** modify spacing, sizing, or visual hierarchy
+
+**If the user says "don't touch the layout" - STOP. Do not touch:**
+
+- Component positioning (absolute, relative, fixed positions)
+- CSS classes and Tailwind utilities
+- Animation configurations
+- Grid/flex layouts
+- Visual styling (colors, borders, shadows)
+- Any file with "layout", "page-client", "draggable", or UI positioning logic
+
+**ONLY work on:**
+
+- Data structures and types
+- Business logic and functions
+- API endpoints and data fetching
+- Content processing (markdown parsing, etc.)
+- Backend logic
+
+**When in doubt: ASK before touching any visual/layout code.**
+
 ## Project Overview
 
 A Next.js 15 portfolio site with a markdown-based blog system featuring tRPC, infinite scroll, AI chat integration, and beautiful Anthropic-inspired design with smooth animations.

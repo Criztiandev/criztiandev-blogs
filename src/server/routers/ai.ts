@@ -72,11 +72,6 @@ function isRateLimitError(error: unknown): boolean {
 }
 
 export const aiRouter = router({
-  /**
-   * Chat with AI about blog content
-   * Takes conversation history and blog content as context
-   * Automatically falls back to alternative models if rate limits are hit
-   */
   chat: publicProcedure
     .input(
       z.object({
@@ -147,17 +142,12 @@ export const aiRouter = router({
 
           // Check if it's a rate limit error
           if (isRateLimitError(error)) {
-            console.warn(
-              `[AI] ✗ Rate limit hit for ${modelConfig.model}, trying next model...`
-            );
+            console.warn(`[AI] ✗ Rate limit hit for ${modelConfig.model}, trying next model...`);
             // Continue to next model in chain
             continue;
           } else {
             // Non-rate-limit error, log and try next model anyway
-            console.error(
-              `[AI] ✗ Error with ${modelConfig.model}:`,
-              lastError.message
-            );
+            console.error(`[AI] ✗ Error with ${modelConfig.model}:`, lastError.message);
             // Still try next model as a fallback
             continue;
           }
@@ -166,8 +156,6 @@ export const aiRouter = router({
 
       // All models failed
       console.error("[AI] ✗ All models exhausted, request failed");
-      throw new Error(
-        lastError?.message || "Failed to get AI response from all available models"
-      );
+      throw new Error(lastError?.message || "Failed to get AI response from all available models");
     }),
 });

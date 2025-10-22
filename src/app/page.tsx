@@ -1,12 +1,13 @@
-import { getAllBlogPosts } from "@/lib/blog/get-blog-content";
+import { getContentByType } from "@/lib/content/get-content";
 import HomePageClient from "@/components/blog/homepage-client";
 
 export default async function Home() {
   // SSR: Fetch first page of blogs on the server
-  const allPosts = await getAllBlogPosts();
-  const sortedPosts = allPosts.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const allPosts = await getContentByType("blog");
+  const sortedPosts = allPosts.sort((a, b) => {
+    if (!a.date || !b.date) return 0;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
 
   const initialData = {
     items: sortedPosts.slice(0, 9),

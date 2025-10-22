@@ -1,48 +1,36 @@
 import { IFloatingDockItems } from "@/components/ui/floating-dock";
-import { IconHome, IconNewSection } from "@tabler/icons-react";
+import { IconHome, IconNewSection, IconTerminal2, IconUser } from "@tabler/icons-react";
 import { Search } from "lucide-react";
 
 interface Props {
   onLayoutToggle: () => void;
-  onContentFilter: (filter: "blogs" | "projects" | "tools") => void;
   onSearch: () => void;
   layoutMode: "free-space" | "grid";
-  contentFilter: "blogs" | "projects" | "tools";
 }
 
-const NavigationData = ({
-  onLayoutToggle,
-  onContentFilter,
-  onSearch,
-  layoutMode,
-}: Props): IFloatingDockItems[] => {
+const NavigationData = ({ onLayoutToggle, onSearch, layoutMode }: Props): IFloatingDockItems[] => {
   return [
     {
       id: "blogs",
       title: "Blogs",
-      type: "button",
+      type: "link",
       icon: <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      onClick: () => onContentFilter("blogs"),
+      href: "/blogs",
     },
-    // {
-    //   id: "projects",
-    //   title: "Projects",
-    //   type: "button",
-    //   icon: (
-    //     <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    //   ),
-    //   onClick: () => onContentFilter("projects"),
-    // },
-
-    // {
-    //   id: "tools",
-    //   title: "Tools",
-    //   type: "button",
-    //   icon: (
-    //     <Wrench className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    //   ),
-    //   onClick: () => onContentFilter("tools"),
-    // },
+    {
+      id: "projects",
+      title: "Projects",
+      type: "link",
+      icon: <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      href: "/projects",
+    },
+    {
+      id: "about",
+      title: "About",
+      type: "link",
+      icon: <IconUser className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      href: "/about",
+    },
     {
       id: "search",
       title: "Search",

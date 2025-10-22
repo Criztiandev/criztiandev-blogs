@@ -14,49 +14,46 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { trpc } from "@/lib/trpc";
+import type { ContentType } from "@/lib/content/get-content";
 
 interface Props {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  type?: ContentType;
 }
 
-export default function SearchModal({ isOpen, setIsOpen }: Props) {
+export default function SearchModal({ isOpen, setIsOpen, type = "blog" }: Props) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = React.useState("");
 
-  // Fetch all blogs for search
-  const { data } = trpc.blog.list.useInfiniteQuery(
-    { limit: 100 }, // Get more for search
+  // Fetch content by type for search
+  const { data } = trpc.content.list.useInfiniteQuery(
+    { type, limit: 100 }, // Get more for search
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       enabled: isOpen, // Only fetch when modal is open
     }
   );
 
-  const allBlogs = React.useMemo(
-    () => data?.pages.flatMap((page) => page.items) || [],
-    [data]
-  );
+  const allContent = React.useMemo(() => data?.pages.flatMap((page) => page.items) || [], [data]);
 
-  // Extract unique tags from all blogs
+  // Extract unique tags from all content
   const allTags = React.useMemo(() => {
-    const tags = allBlogs.flatMap((blog) => blog.tags || []);
+    const tags = allContent.flatMap((item) => item.tags || []);
     return [...new Set(tags)];
-  }, [allBlogs]);
+  }, [allContent]);
 
-  // Filter blogs by search query (title + tags)
-  const filteredBlogs = React.useMemo(() => {
-    if (!searchQuery) return allBlogs.slice(0, 5); // Show first 5 if no search
+  // Filter content by search query (title + tags)
+  const filteredContent = React.useMemo(() => {
+    if (!searchQuery) return allContent.slice(0, 5); // Show first 5 if no search
 
     const query = searchQuery.toLowerCase();
-    return allBlogs.filter((blog) => {
-      const matchesTitle = blog.title.toLowerCase().includes(query);
-      const matchesTags = blog.tags?.some((tag) =>
-        tag.toLowerCase().includes(query)
-      );
+    return allContent.filter((item) => {
+      const matchesTitle = item.title.toLowerCase().includes(query);
+      const matchesTags = item.tags?.some((tag) => tag.toLowerCase().includes(query));
       return matchesTitle || matchesTags;
     });
-  }, [allBlogs, searchQuery]);
+  }, [allContent, searchQuery]);
 
   // Filter tags by search query
   const filteredTags = React.useMemo(() => {
@@ -79,8 +76,9 @@ export default function SearchModal({ isOpen, setIsOpen }: Props) {
     return () => document.removeEventListener("keydown", down);
   }, [setIsOpen]);
 
-  const handleBlogSelect = (slug: string) => {
-    router.push(`/blogs/${slug}`);
+  const handleContentSelect = (slug: string) => {
+    const typeRoute = type === "blog" ? "blogs" : type === "project" ? "projects" : "about";
+    router.push(`/${typeRoute}/${slug}`);
     setIsOpen(false);
     setSearchQuery("");
   };
@@ -89,10 +87,13 @@ export default function SearchModal({ isOpen, setIsOpen }: Props) {
     setSearchQuery(tag);
   };
 
+  const contentLabel = type === "blog" ? "Blogs" : type === "project" ? "Projects" : "About Me";
+  const placeholderText = `Search ${contentLabel.toLowerCase()} or filter by tags...`;
+
   return (
     <CommandDialog open={isOpen} onOpenChange={setIsOpen}>
       <CommandInput
-        placeholder="Search blogs or filter by tags..."
+        placeholder={placeholderText}
         value={searchQuery}
         onValueChange={setSearchQuery}
       />
@@ -118,22 +119,20 @@ export default function SearchModal({ isOpen, setIsOpen }: Props) {
           </>
         )}
 
-        {/* Blogs Section */}
-        {filteredBlogs.length > 0 && (
-          <CommandGroup heading="Blogs">
-            {filteredBlogs.map((blog) => (
+        {/* Content Section */}
+        {filteredContent.length > 0 && (
+          <CommandGroup heading={contentLabel}>
+            {filteredContent.map((item) => (
               <CommandItem
-                key={blog.id}
-                onSelect={() => handleBlogSelect(blog.slug)}
+                key={item.id}
+                onSelect={() => handleContentSelect(item.slug)}
                 className="cursor-pointer"
               >
                 <FileText size={16} className="opacity-60" aria-hidden="true" />
                 <div className="flex flex-col">
-                  <span>{blog.title}</span>
-                  {blog.tags && blog.tags.length > 0 && (
-                    <span className="text-xs text-muted-foreground">
-                      {blog.tags.join(", ")}
-                    </span>
+                  <span>{item.title}</span>
+                  {item.tags && item.tags.length > 0 && (
+                    <span className="text-muted-foreground text-xs">{item.tags.join(", ")}</span>
                   )}
                 </div>
               </CommandItem>

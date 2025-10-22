@@ -15,6 +15,7 @@ interface AnimatedBlogCardProps {
   tags?: string[];
   date?: string;
   index: number;
+  type?: "blog" | "project" | "aboutme";
 }
 
 export function AnimatedBlogCard({
@@ -25,6 +26,7 @@ export function AnimatedBlogCard({
   tags,
   date,
   index,
+  type = "blog",
 }: AnimatedBlogCardProps) {
   // Calculate reading time (simplified, ~200 words per min, estimate 3 min for avg blog)
   const readingTime = 3;
@@ -38,6 +40,72 @@ export function AnimatedBlogCard({
       })
     : "";
 
+  // Generate the correct link based on content type
+  const typeRoutes = {
+    blog: "blogs",
+    project: "projects",
+    aboutme: "about", // About doesn't have detail pages
+  };
+  const linkHref = type === "aboutme" ? "#" : `/${typeRoutes[type]}/${slug}`;
+
+  const cardContent = (
+    <article className="bg-card h-full overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-lg">
+      {/* Image */}
+      {image && (
+        <div className="bg-muted relative aspect-[16/9] overflow-hidden">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          {/* Overlay gradient on hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="space-y-4 p-6">
+        {/* Tags */}
+        {tags && tags.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {tags.slice(0, 3).map((tag) => (
+              <Badge key={tag} variant="secondary" className="text-xs font-medium">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
+
+        {/* Title */}
+        <h3 className="group-hover:text-primary line-clamp-2 text-xl leading-tight font-bold tracking-tight transition-colors">
+          {title}
+        </h3>
+
+        {/* Description */}
+        {description && (
+          <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
+            {description}
+          </p>
+        )}
+
+        {/* Metadata */}
+        <div className="text-muted-foreground flex items-center gap-4 border-t pt-2 text-xs">
+          {formattedDate && (
+            <div className="flex items-center gap-1.5">
+              <Calendar className="h-3.5 w-3.5" />
+              <span>{formattedDate}</span>
+            </div>
+          )}
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-3.5 w-3.5" />
+            <span>{readingTime} min read</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -50,65 +118,13 @@ export function AnimatedBlogCard({
       whileHover={{ y: -4 }}
       className="group"
     >
-      <Link href={`/blogs/${slug}`} className="block">
-        <article className="h-full bg-card border rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300">
-          {/* Image */}
-          <div className="relative aspect-[16/9] overflow-hidden bg-muted">
-            <Image
-              src={image}
-              alt={title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            {/* Overlay gradient on hover */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
-
-          {/* Content */}
-          <div className="p-6 space-y-4">
-            {/* Tags */}
-            {tags && tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {tags.slice(0, 3).map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant="secondary"
-                    className="text-xs font-medium"
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
-
-            {/* Title */}
-            <h3 className="text-xl font-bold tracking-tight leading-tight line-clamp-2 group-hover:text-primary transition-colors">
-              {title}
-            </h3>
-
-            {/* Description */}
-            {description && (
-              <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-                {description}
-              </p>
-            )}
-
-            {/* Metadata */}
-            <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
-              {formattedDate && (
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>{formattedDate}</span>
-                </div>
-              )}
-              <div className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5" />
-                <span>{readingTime} min read</span>
-              </div>
-            </div>
-          </div>
-        </article>
-      </Link>
+      {type === "aboutme" ? (
+        cardContent
+      ) : (
+        <Link href={linkHref} className="block">
+          {cardContent}
+        </Link>
+      )}
     </motion.div>
   );
 }
