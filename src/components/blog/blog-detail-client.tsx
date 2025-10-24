@@ -1,12 +1,12 @@
 "use client";
 
-import { trpc } from "@/lib/trpc";
 import { calculateReadingTime, formatDate } from "@/lib/blog/utils";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { ShareButtons } from "./share-buttons";
+import LikeButton from "./like-button";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "@/components/ui/code-block";
@@ -25,15 +25,8 @@ interface BlogDetailClientProps {
 }
 
 export function BlogDetailClient({ slug, initialData }: BlogDetailClientProps) {
-  const { data } = trpc.blog.getBySlug.useQuery(
-    { slug, type: "blog" },
-    {
-      initialData: { ...initialData, type: "blog" as const },
-      staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
-    }
-  );
-
-  if (!data) return null;
+  // Use data directly from props (already fetched in wrapper)
+  const data = initialData;
 
   // Extract frontmatter values with proper typing
   const title = data.frontmatter.title as string;
@@ -231,6 +224,11 @@ export function BlogDetailClient({ slug, initialData }: BlogDetailClientProps) {
               >
                 {data.markdownContent}
               </ReactMarkdown>
+            </div>
+
+            {/* Like button */}
+            <div className="mt-12">
+              <LikeButton slug={slug} />
             </div>
 
             {/* Share buttons */}

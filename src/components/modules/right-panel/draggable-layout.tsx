@@ -57,13 +57,16 @@ const DraggableLayout = ({ payload, type = "blog", CardComponent }: Props) => {
           {typeLabels[type]}
         </span>
       </p>
-      {payload.map((item) => {
+      {payload.map((item, index) => {
         const Card = CardComponent || BlogCard;
         const cardId = item.id || item.title;
+        // Calculate z-index: first item (latest) gets highest z-index
+        const baseZIndex = payload.length - index;
         return (
           <DraggableCardBody
             key={item.title}
             className={item.className}
+            zIndex={baseZIndex}
             onDragStart={() => setDraggingCard(cardId)}
             onDragEnd={() => setTimeout(() => setDraggingCard(null), 100)}
             isAboutPage={type === "aboutme"}

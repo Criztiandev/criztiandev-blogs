@@ -1,5 +1,7 @@
-import { MailIcon } from "lucide-react";
+"use client";
 
+import { MailIcon } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,20 +14,39 @@ import {
 import { Input } from "@/components/ui/input";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 export default function NewsLetterModal() {
-  const handleCardClick = () => {
-    toast.success(
-      "Oops! Our backend’s getting a quick tune-up right now 🚧 \n Sorry for the inconvenience — we’ll be back soon!"
-    );
+  const [email, setEmail] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const subscribeMutation = trpc.newsletter.subscribe.useMutation({
+    onSuccess: (data) => {
+      toast.success(data.message);
+      setEmail("");
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to subscribe. Please try again.");
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email.trim()) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    subscribeMutation.mutate({ email });
   };
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <ShinyButton className="p-4 rounded-full  flex justify-center items-center bg-primary ">
-          <span className="text-base text-primary-foreground font-semibold">
-            Get in Touch
-          </span>
+        <ShinyButton className="bg-primary flex items-center justify-center rounded-full p-4">
+          <span className="text-primary-foreground text-base font-semibold">Get in Touch</span>
         </ShinyButton>
       </DialogTrigger>
       <DialogContent>
@@ -46,16 +67,14 @@ export default function NewsLetterModal() {
             </svg>
           </div>
           <DialogHeader>
-            <DialogTitle className="sm:text-center">
-              Never miss an update
-            </DialogTitle>
+            <DialogTitle className="sm:text-center">Never miss an update</DialogTitle>
             <DialogDescription className="sm:text-center">
               Subscribe to receive news and special offers.
             </DialogDescription>
           </DialogHeader>
         </div>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="*:not-first:mt-2">
             <div className="relative">
               <Input
@@ -64,18 +83,22 @@ export default function NewsLetterModal() {
                 placeholder="hi@yourcompany.com"
                 type="email"
                 aria-label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={subscribeMutation.isPending}
+                required
               />
-              <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+              <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
                 <MailIcon size={16} aria-hidden="true" />
               </div>
             </div>
           </div>
-          <Button type="button" className="w-full" onClick={handleCardClick}>
-            Subscribe
+          <Button type="submit" className="w-full" disabled={subscribeMutation.isPending}>
+            {subscribeMutation.isPending ? "Subscribing..." : "Subscribe"}
           </Button>
         </form>
 
-        <p className="text-center text-xs text-muted-foreground">
+        <p className="text-muted-foreground text-center text-xs">
           By subscribing you agree to our{" "}
           <a className="underline hover:no-underline" href="#">
             Privacy Policy

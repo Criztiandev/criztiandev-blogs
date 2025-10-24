@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { motion, AnimatePresence } from "motion/react";
-import { canSendMessage, recordMessage, getRemainingMessages } from "@/lib/rate-limit";
 import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 interface Message {
   role: "user" | "assistant";
@@ -27,30 +27,35 @@ export default function AIChatButton({ blogContent, blogTitle }: AIChatButtonPro
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
-  const [remainingMessages, setRemainingMessages] = useState({ daily: 15, minute: 3 });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Fetch remaining messages from server
+  const { data: rateLimitData, refetch: refetchRateLimit } = trpc.rateLimit.check.useQuery(
+    undefined,
+    {
+      enabled: isOpen, // Only fetch when chat is open
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const remainingDaily = rateLimitData?.remainingDaily ?? 15;
+  const remainingMinute = rateLimitData?.remainingMinute ?? 3;
+
+  // Record message mutation
+  const recordMessageMutation = trpc.rateLimit.record.useMutation();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Update remaining messages count when chat opens or messages change
-  useEffect(() => {
-    if (isOpen) {
-      const remaining = getRemainingMessages();
-      setRemainingMessages(remaining);
-    }
-  }, [isOpen, messages]);
-
   const handleSendMessage = async () => {
     if (!input.trim() || isStreaming) return;
 
-    // Check rate limits before sending
-    const rateLimitCheck = canSendMessage();
-    if (!rateLimitCheck.allowed) {
-      toast.error(rateLimitCheck.reason || "Rate limit exceeded");
+    // Check rate limits before sending (server-side)
+    if (!rateLimitData?.allowed) {
+      toast.error(rateLimitData?.reason || "Rate limit exceeded");
       return;
     }
 
@@ -58,13 +63,6 @@ export default function AIChatButton({ blogContent, blogTitle }: AIChatButtonPro
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsStreaming(true);
-
-    // Record the message for rate limiting
-    recordMessage();
-
-    // Update remaining messages count
-    const remaining = getRemainingMessages();
-    setRemainingMessages(remaining);
 
     // Create new abort controller for this request
     abortControllerRef.current = new AbortController();
@@ -118,6 +116,12 @@ export default function AIChatButton({ blogContent, blogTitle }: AIChatButtonPro
           return newMessages;
         });
       }
+
+      // Record successful message send
+      await recordMessageMutation.mutateAsync();
+
+      // Refetch rate limit to update remaining count
+      refetchRateLimit();
     } catch (error) {
       if (error instanceof Error && error.name === "AbortError") {
         console.log("Request aborted");
@@ -210,12 +214,12 @@ export default function AIChatButton({ blogContent, blogTitle }: AIChatButtonPro
                 <span
                   className={cn(
                     "rounded-md px-2 py-1 font-medium",
-                    remainingMessages.daily <= 5
+                    remainingDaily <= 5
                       ? "bg-destructive/10 text-destructive"
                       : "bg-muted text-muted-foreground"
                   )}
                 >
-                  {remainingMessages.daily}/15 messages today
+                  {remainingDaily}/15 messages today
                 </span>
               </div>
             </div>
@@ -254,7 +258,7 @@ export default function AIChatButton({ blogContent, blogTitle }: AIChatButtonPro
                           )}
                         >
                           {message.role === "assistant" ? (
-                            <div className="prose prose-sm prose-neutral dark:prose-invert prose-p:my-3 prose-p:leading-relaxed prose-headings:my-3 prose-headings:font-semibold prose-ul:my-3 prose-ol:my-3 prose-li:my-1.5 prose-code:text-xs prose-code:bg-background/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-pre:my-3 prose-pre:bg-background prose-pre:text-xs prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:font-semibold max-w-none">
+                            <div className="prose prose-sm prose-neutral dark:prose-invert prose-p:my-6 prose-p:leading-relaxed prose-headings:my-4 prose-headings:font-semibold prose-ul:my-4 prose-ol:my-4 prose-li:my-1.5 prose-code:text-xs prose-code:bg-background/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-pre:my-4 prose-pre:bg-background prose-pre:text-xs prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:font-semibold max-w-none">
                               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                 {message.content}
                               </ReactMarkdown>

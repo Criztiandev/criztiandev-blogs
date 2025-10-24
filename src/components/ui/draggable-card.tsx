@@ -19,6 +19,7 @@ export const DraggableCardBody = ({
   isAboutPage = false,
   isSelected = false,
   onSelect,
+  zIndex,
 }: {
   className?: string;
   children?: React.ReactNode;
@@ -27,6 +28,7 @@ export const DraggableCardBody = ({
   isAboutPage?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
+  zIndex?: number;
 }) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -160,6 +162,7 @@ export const DraggableCardBody = ({
         rotateY,
         opacity,
         willChange: "transform",
+        zIndex: zIndex,
       }}
       animate={controls}
       whileHover={{ scale: 1.02 }}
