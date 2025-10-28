@@ -12,6 +12,7 @@ import {
 } from "motion/react";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 
 export interface IFloatingDockItems {
   id?: string;
@@ -35,11 +36,7 @@ export const FloatingDock = ({
 }) => {
   return (
     <>
-      <FloatingDockDesktop
-        selectedItem={selectedItem}
-        items={items}
-        className={desktopClassName}
-      />
+      <FloatingDockDesktop selectedItem={selectedItem} items={items} className={desktopClassName} />
       <FloatingDockMobile items={items} className={mobileClassName} />
     </>
   );
@@ -87,13 +84,14 @@ const FloatingDockMobile = ({
                     <div className="h-4 w-4">{item.icon}</div>
                   </button>
                 ) : (
-                  <a
-                    href={item.href}
+                  <Link
+                    href={item.href!}
                     key={item.title}
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-900"
+                    prefetch={true}
                   >
                     <div className="h-4 w-4">{item.icon}</div>
-                  </a>
+                  </Link>
                 )}
               </motion.div>
             ))}
@@ -161,16 +159,8 @@ function IconContainer({
   const widthTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
   const heightTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
 
-  const widthTransformIcon = useTransform(
-    distance,
-    [-150, 0, 150],
-    [20, 40, 20]
-  );
-  const heightTransformIcon = useTransform(
-    distance,
-    [-150, 0, 150],
-    [20, 40, 20]
-  );
+  const widthTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
+  const heightTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
 
   const width = useSpring(widthTransform, {
     mass: 0.1,
@@ -228,7 +218,7 @@ function IconContainer({
           </motion.div>
         </button>
       ) : (
-        <a href={href}>
+        <Link href={href!} prefetch={true}>
           <motion.div
             ref={ref}
             style={{ width, height }}
@@ -255,7 +245,7 @@ function IconContainer({
               {icon}
             </motion.div>
           </motion.div>
-        </a>
+        </Link>
       )}
     </>
   );
