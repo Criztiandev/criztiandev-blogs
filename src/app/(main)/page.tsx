@@ -1,0 +1,18 @@
+import { getContentByType } from "@/lib/content/get-content";
+import { ContentGrid } from "@/components/layout/content-grid";
+
+export default async function HomePage() {
+  // SSR: Fetch first page of blogs on the server
+  const allPosts = await getContentByType("blog");
+  const sortedPosts = allPosts.sort((a, b) => {
+    if (!a.date || !b.date) return 0;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+
+  const initialData = {
+    items: sortedPosts.slice(0, 9),
+    nextCursor: sortedPosts.length > 9 ? 9 : undefined,
+  };
+
+  return <ContentGrid type="blog" initialData={initialData} />;
+}
