@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { calculateReadingTime, formatDate } from "@/lib/blog/utils";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
@@ -124,7 +125,17 @@ export function ProjectDetailClient({ slug, initialData }: BlogDetailClientProps
                         </h3>
                       );
                     },
-                    p: ({ children }) => <p className="mb-6 text-base leading-8">{children}</p>,
+                    p: ({ children }) => {
+                      // Filter out div elements (like video embeds) to prevent hydration errors
+                      const hasDiv = React.Children.toArray(children).some(
+                        (child) => React.isValidElement(child) && child.type === "div"
+                      );
+                      // If paragraph contains a div, render as a div instead
+                      if (hasDiv) {
+                        return <div className="mb-6 text-base leading-8">{children}</div>;
+                      }
+                      return <div className="mb-6 text-base leading-8">{children}</div>;
+                    },
                     code: ({ className, children, ...props }) => {
                       const match = /language-(\w+)/.exec(className || "");
                       const language = match ? match[1] : "";

@@ -2,6 +2,71 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🚨 CORE PHILOSOPHY - THE ALGORITHM
+
+Follow these steps in order. **Question everything. Delete ruthlessly. Simplify relentlessly.**
+
+### 1. Question Every Requirement
+
+- Challenge WHO requested it (find the human, not the department)
+- Ask "Why does this exist?" for every line of code
+- Delete it if you can't defend why it's there
+- Push back on over-engineering immediately
+- **Default answer: NO. Prove why it should be YES.**
+
+### 2. Delete Dead Weight
+
+- Delete features nobody uses
+- Delete abstraction layers that add zero value
+- Delete dependencies that solve imaginary problems
+- Delete code that "might be useful later" (YAGNI)
+- **If you're not adding some back later, you haven't deleted enough**
+
+### 3. Simplify or Optimize
+
+- **ONLY optimize what remains AFTER deletion**
+- Simple code > clever code
+- Fewer layers > many layers
+- One way to do things > multiple options
+- **The best code is no code. Second best is simple code.**
+
+### 4. Accelerate Cycle Time
+
+- Make it fast (speed = competitive advantage)
+- Remove waiting/approval steps
+- Automate repetitive tasks
+
+### 5. Automate Last
+
+- **NEVER automate before steps 1-4**
+- Automate only proven, simple, repetitive tasks
+- Don't automate broken processes
+
+## 💰 THE IDIOT INDEX (Cost Discipline)
+
+**Formula:** `API Cost / Raw Material Cost = Idiot Index`
+
+**Rule:** If Idiot Index > 2, you're doing it wrong.
+
+### For AI/Token Usage:
+
+- **Raw Material Cost**: Groq API is FREE (with rate limits)
+- **Our Cost**: Time spent on API calls + complexity overhead
+- **Target**: Keep context under 10K tokens per request
+- **Why**: Faster responses, lower rate limit hits, simpler debugging
+
+### Token Budget Rules:
+
+1. **Question**: Do we need to send this data? (Delete unnecessary context)
+2. **Minimize**: Send summaries, not full content (Simplify)
+3. **Cache**: Reuse context when possible (Optimize)
+4. **Measure**: Log token usage, track costs (Accelerate feedback)
+
+**Example:**
+
+- ❌ BAD: Sending 50K tokens (full blog content) → Slow, hits rate limits
+- ✅ GOOD: Sending 8K tokens (summaries only) → Fast, stays under limits
+
 ## ⚠️ CRITICAL RULES - READ FIRST
 
 **ABSOLUTELY FORBIDDEN:**
@@ -12,6 +77,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ❌ **DO NOT** rewrite page components that control visual layout
 - ❌ **DO NOT** change animation configurations or transitions
 - ❌ **DO NOT** modify spacing, sizing, or visual hierarchy
+- ❌ **DO NOT** create documentation unless you are told
 
 **If the user says "don't touch the layout" - STOP. Do not touch:**
 
@@ -336,6 +402,20 @@ npm run new-blog "Your Post Title"
 - System prompt instructs AI to be a helpful blog assistant
 - Receives blog title and content as context
 - Streams responses for better UX
+
+**AI Context Management (Follow The Algorithm):**
+
+1. **Question**: Do we need AI for this? Can a static page/link work instead?
+2. **Delete**: Remove unnecessary context data before sending to API
+3. **Simplify**: Send only what's needed (summaries > full content)
+4. **Measure**: Log token counts, track API usage patterns
+
+**Token Budget per Feature:**
+
+- Blog post chat: ~15K tokens (blog content + conversation)
+- Portfolio chat: ~8K tokens (summaries only, no full content)
+- Max context window: 128K tokens (Groq llama-3.3-70b)
+- Target: Keep under 10K tokens for fast responses
 
 **Search & Filtering:**
 

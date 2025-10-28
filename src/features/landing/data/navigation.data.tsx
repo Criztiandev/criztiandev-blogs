@@ -1,5 +1,11 @@
 import { IFloatingDockItems } from "@/components/ui/floating-dock";
-import { IconHome, IconNewSection, IconTerminal2, IconUser } from "@tabler/icons-react";
+import {
+  IconHome,
+  IconNewSection,
+  IconTerminal2,
+  IconUser,
+  IconSparkles,
+} from "@tabler/icons-react";
 import { Search } from "lucide-react";
 
 interface Props {
@@ -10,6 +16,13 @@ interface Props {
 
 const NavigationData = ({ onLayoutToggle, onSearch, layoutMode }: Props): IFloatingDockItems[] => {
   return [
+    {
+      id: "home",
+      title: "Home",
+      type: "link",
+      icon: <IconSparkles className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      href: "/home",
+    },
     {
       id: "blogs",
       title: "Blogs",

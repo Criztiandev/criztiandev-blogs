@@ -1,7 +1,7 @@
 ---
 title: "Kuripot Coach Mobile App"
 slug: "kuripot-coach-mobile-app"
-date: "2025-10-18"
+date: "2025-10-23"
 description: "A personal finance mobile app designed for Filipinos, featuring AI-powered financial coaching, goal tracking, real-time insights, and smart payment automation."
 image: "/assets/image/kc-landing-page.png"
 tags: ["Mobile App", "AI Chatbot", "Financial Coaching", "Full Stack Development", "React Native"]
@@ -15,6 +15,22 @@ Building Kuripot Coach was a rewarding journey—an app created not just for bud
 ## Overview
 
 At its core, Kuripot Coach aims to help users hit their financial goals without feeling overwhelmed. Whether it's saving for a trip to Boracay or managing weekly bills and bonuses, the app adapts to how Filipinos actually handle money. The AI chat isn’t just a gimmick—it’s a buddy that talks you through your finances, making saving and budgeting feel less like a chore.
+
+## Techstack
+
+- React Native
+- MUI
+- Nextjs
+- Tailwindcss
+- Typescript
+- Tanstack Query
+- Zustand
+- Aws
+- GCP
+- Vertex AI
+- Nodejs
+- Expressjs
+- Google ADK
 
 ## Key Features
 

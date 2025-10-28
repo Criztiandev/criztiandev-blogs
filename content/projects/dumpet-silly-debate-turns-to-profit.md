@@ -1,7 +1,7 @@
 ---
 title: "Dumpet Decentralized Voting Platform"
 slug: "dumpet-decentralized-voting-platform"
-date: "2025-10-20"
+date: "2025-10-21"
 description: "A decentralized voting platform that gamifies everyday debates with real stakes, built on Arweave and AO Protocol."
 image: "/assets/image/dumpet.png"
 tags: ["Decentralized App", "Blockchain", "Smart Contracts", "React", "Arweave"]
@@ -15,6 +15,17 @@ Building Dumpet was equally challenging and rewarding, especially given the dece
 ## Inspiration
 
 Noticed how people love arguing about trivial things online but rarely put their money where their mouth is. Wanted to gamify silly debates while adding real stakes.
+
+## Techstack
+
+- React
+- Vite
+- Jotai
+- ScadcnUI
+- Arweave
+- Supabase
+- Tailwindcss
+- Typescript
 
 ## What It Does
 

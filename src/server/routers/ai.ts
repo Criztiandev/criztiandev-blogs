@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { router, publicProcedure } from "../trpc";
 import Groq from "groq-sdk";
+import { getPortfolioContext } from "@/lib/get-portfolio-context";
 
 // Initialize Groq client
 const groq = new Groq({
@@ -156,6 +157,91 @@ export const aiRouter = router({
 
       // All models failed
       console.error("[AI] ✗ All models exhausted, request failed");
+      throw new Error(lastError?.message || "Failed to get AI response from all available models");
+    }),
+
+  /**
+   * Portfolio Chat - AI assistant for the entire portfolio
+   * Following The Algorithm: Simplified context (~8K tokens), no full blog content
+   */
+  portfolioChat: publicProcedure
+    .input(
+      z.object({
+        messages: z.array(
+          z.object({
+            role: z.enum(["user", "assistant"]),
+            content: z.string(),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { messages } = input;
+
+      // Build portfolio context (Following Idiot Index: ~8K tokens, not 50K)
+      const portfolioContext = await getPortfolioContext();
+
+      // Create system message with portfolio context
+      const systemMessage = {
+        role: "system" as const,
+        content: portfolioContext,
+      };
+
+      const chatMessages = [systemMessage, ...messages];
+      let lastError: Error | null = null;
+
+      // Try each model in the fallback chain (reuse existing logic)
+      for (let i = 0; i < MODEL_FALLBACK_CHAIN.length; i++) {
+        const modelConfig = MODEL_FALLBACK_CHAIN[i];
+
+        try {
+          console.log(
+            `[Portfolio AI] Attempting with model ${i + 1}/${MODEL_FALLBACK_CHAIN.length}: ${modelConfig.model}`
+          );
+
+          // Call Groq API with current model
+          const completion = await groq.chat.completions.create({
+            model: modelConfig.model,
+            messages: chatMessages,
+            temperature: 0.7,
+            max_completion_tokens: 1024,
+            top_p: 0.95,
+          });
+
+          const responseContent = completion.choices[0]?.message?.content;
+
+          if (!responseContent) {
+            throw new Error("No response from AI");
+          }
+
+          // Log token usage for Idiot Index tracking
+          console.log(
+            `[Portfolio AI] ✓ Success with ${modelConfig.model}. Usage: ${completion.usage?.total_tokens || "unknown"} tokens`
+          );
+
+          return {
+            content: responseContent,
+            modelUsed: modelConfig.model,
+            fallbackLevel: i,
+          };
+        } catch (error) {
+          lastError = error instanceof Error ? error : new Error("Unknown error");
+
+          // Check if it's a rate limit error
+          if (isRateLimitError(error)) {
+            console.warn(
+              `[Portfolio AI] ✗ Rate limit hit for ${modelConfig.model}, trying next model...`
+            );
+            continue;
+          } else {
+            console.error(`[Portfolio AI] ✗ Error with ${modelConfig.model}:`, lastError.message);
+            continue;
+          }
+        }
+      }
+
+      // All models failed
+      console.error("[Portfolio AI] ✗ All models exhausted, request failed");
       throw new Error(lastError?.message || "Failed to get AI response from all available models");
     }),
 });

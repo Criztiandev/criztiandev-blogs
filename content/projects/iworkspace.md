@@ -1,7 +1,7 @@
 ---
 title: "IWorkspace - The First Focus-First Agile Workspace"
 slug: "iworkspace-focus-first-agile-workspace"
-date: "2025-10-19"
+date: "2025-10-22"
 description: "A revolutionary agile workspace that solves team context-switching productivity loss with floating focus windows and integrated sprint management."
 image: "/assets/image/i-work-space.png"
 tags: ["Agile", "Productivity", "Floating Window", "Next.js", "Electron"]
@@ -15,6 +15,18 @@ Context switching often feels like an unavoidable productivity killer—especial
 ## Overview
 
 IWorkspace introduces a **focus-first approach** to enterprise agile management. It keeps sprint tasks visible and actionable throughout your workday through revolutionary floating windows that persistently display your current tasks, Pomodoro timer, and quick subtasks. This means teams can have enterprise-grade agile management tools without sacrificing individual flow and focus.
+
+## Techstack
+
+- Nextjs
+- Supabase
+- Drizzle Orm
+- Zustand
+- Schadcn UI
+- tRPC
+- Graphql
+- Typescript
+- Azure
 
 ## Key Features
 
