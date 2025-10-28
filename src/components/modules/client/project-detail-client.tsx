@@ -50,6 +50,7 @@ export function ProjectDetailClient({ slug, initialData }: BlogDetailClientProps
               {/* Back button */}
               <Link
                 href="/projects"
+                prefetch={true}
                 className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2 text-sm transition-all duration-200 hover:gap-3"
               >
                 <ArrowLeft className="h-4 w-4" />

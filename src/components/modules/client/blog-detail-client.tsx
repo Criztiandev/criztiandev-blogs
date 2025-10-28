@@ -51,6 +51,7 @@ export function BlogDetailClient({ slug, initialData }: BlogDetailClientProps) {
               {/* Back button */}
               <Link
                 href="/"
+                prefetch={true}
                 className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2 text-sm transition-all duration-200 hover:gap-3"
               >
                 <ArrowLeft className="h-4 w-4" />
