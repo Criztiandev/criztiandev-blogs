@@ -87,7 +87,7 @@ export function ContentGrid({
     <>
       {/* Free Space Layout - Desktop only (≥1024px) when layoutMode is "free-space" */}
       {layoutMode === "free-space" && (
-        <div className="hidden h-full w-full lg:block">
+        <div className="hidden min-h-screen w-full lg:block">
           <DraggableLayout
             payload={
               contentPosts as Array<{
@@ -108,7 +108,7 @@ export function ContentGrid({
       {/* Grid Layout - Always show on mobile/tablet (<1024px), or when layoutMode is "grid" on desktop */}
       <div
         className={cn(
-          "h-full w-full overflow-auto",
+          "min-h-screen w-full overflow-auto",
           layoutMode === "grid" ? "block" : "block lg:hidden"
         )}
       >

@@ -43,17 +43,17 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <LayoutContext.Provider value={{ layoutMode }}>
-      <main className="grid h-screen grid-cols-1 overflow-hidden lg:grid-cols-[350px_auto] xl:grid-cols-[400px_auto]">
+      <main className="grid min-h-screen grid-cols-1 lg:grid-cols-[350px_auto] xl:grid-cols-[400px_auto]">
         <MainLayoutSidebar />
 
-        <div className="h-full grid-cols-1 lg:h-screen">
+        <div className="min-h-screen grid-cols-1">
           {/* Desktop Sidebar Spacer */}
           <div className="hidden lg:block" />
 
           <div className="relative">
             <div
               className={cn(
-                "min-h-screen w-full border lg:h-screen",
+                "min-h-screen w-full border",
                 "[background-size:40px_40px]",
                 "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
                 "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]"
