@@ -1,17 +1,10 @@
 ---
-title: "The Real Reason AI Fluency Matters — And Why Just “Using AI” Isn’t Enough"
+title: "Deligence: The Real Reason AI Fluency Matters — And Why Just “Using AI” Isn’t Enough"
 slug: "the-real-reason-ai-fluency-matters-and-why-just-using-ai-isn-t-enough"
 date: "2025-10-19"
 description: "Being good at AI isn’t about fancy prompts or coding—it's about understanding how to work with it effectively. This article breaks down what AI fluency really means, why it matters, and how you can use automation, augmentation, and agency to get real results."
 image: "https://videos.openai.com/az/vg-assets/assets%2Ftask_01k7z9p5gwe0ca2eaq5xkm87yp%2F1760913263_img_1.webp?se=2025-10-25T22%3A40%3A31Z&sp=r&sv=2024-08-04&sr=b&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-10-19T22%3A02%3A53Z&ske=2025-10-26T22%3A07%3A53Z&sks=b&skv=2024-08-04&sig=Ae2Z001LWjEhSNNHUtbCDjj736Lwm/OYoPUTAskuzqw%3D&ac=oaivgprodscus"
-tags:
-  [
-    "AI Fluency",
-    "Artificial Intelligence",
-    "Productivity",
-    "Learning",
-    "Technology",
-  ]
+tags: ["AI Fluency", "Artificial Intelligence", "Productivity", "Learning", "Technology"]
 author: "Criztiandev"
 ---
 

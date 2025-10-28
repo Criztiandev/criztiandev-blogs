@@ -3,9 +3,8 @@ title: "Is Applying SOLID Principles in Next.js the Key to Bulletproof Code? (Or
 slug: "is-applying-solid-principles-in-next-js-the-key-to-bulletproof-code-or-total-overkill"
 date: "2025-10-20"
 description: "Unpack SOLID principles in Next.js – learn how these OOP guidelines can make your code cleaner, more maintainable, and scalable. With simple examples, real-world use cases, pros/cons, and when to apply them (or not) in your React-based projects."
-image: "https://videos.openai.com/az/vg-assets/assets%2Ftask_01k7z6te1cf0b83maen68ch5an%2F1760910289_img_1.webp?se=2025-10-25T21%3A46%3A19Z&sp=r&sv=2024-08-04&sr=b&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-10-19T11%3A54%3A09Z&ske=2025-10-26T11%3A59%3A09Z&sks=b&skv=2024-08-04&sig=39TcgPsWker1S%2B3gn6WCAbRPtsgWIwlI8rfZsTowKFA%3D&ac=oaivgprodscus"
-tags:
-  ["Web2", "Next.js", "SOLID", "Software Design", "Web Development", "React"]
+image: "/assets/image/blogs/hidden-skll-no-one-talks-about-collaboration.png"
+tags: ["Web2", "Next.js", "SOLID", "Software Design", "Web Development", "React"]
 author: "Criztiandev"
 ---
 

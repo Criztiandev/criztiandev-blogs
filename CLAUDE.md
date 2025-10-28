@@ -4,8 +4,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## ⚠️ CRITICAL RULES - READ FIRST
 
-### NEVER TOUCH LAYOUTS, STYLING, OR UI POSITIONING
-
 **ABSOLUTELY FORBIDDEN:**
 
 - ❌ **DO NOT** modify any layout components or their positioning logic

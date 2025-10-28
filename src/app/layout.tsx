@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TRPCProvider } from "@/lib/trpc-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { RootLayoutClient } from "./layout-client";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -30,9 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <TRPCProvider>
-          <RootLayoutClient>{children}</RootLayoutClient>
-        </TRPCProvider>
+        <TRPCProvider>{children}</TRPCProvider>
         <Toaster />
         <Analytics />
         <SpeedInsights />

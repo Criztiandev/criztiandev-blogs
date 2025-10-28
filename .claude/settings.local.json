@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "allow": ["Bash(git add .)", "Bash(npm install:*)", "Bash(npm run type-check:*)"],
+    "allow": ["Bash(git add .)", "Bash(npm install:*)", "Bash(npm run type-check:*)", "Bash(rm:*)"],
     "deny": [],
     "ask": []
   }

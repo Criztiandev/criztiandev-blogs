@@ -1,9 +1,9 @@
 ---
-title: "The Subtle Art of Talking to AI: It’s Not About Commands — It’s About Conversations"
+title: "Description: The Subtle Art of Talking to AI: It’s Not About Commands — It’s About Conversations"
 slug: "the-subtle-art-of-talking-to-ai-it-s-not-about-commands-it-s-about-conversations"
 date: "2025-10-24"
 description: "Learning to talk to AI taught me something unexpected — the art of listening, asking better questions, and communicating with clarity. This isn’t about mastering prompts; it’s about mastering thought."
-image: "https://media.licdn.com/dms/image/v2/D5612AQEnOLBeC7FhBQ/article-cover_image-shrink_720_1280/B56ZoUfRZ0IYAM-/0/1761280338197?e=1762992000&v=beta&t=wgvxysFeFZzqPNxKN0B8N10xQXzYDsjfow0OsNr-12I"
+image: "/assets/image/blogs/subtitle.png"
 tags: ["AI Communication", "Prompt Engineering", "Anthropic", "Learning", "Reflection"]
 author: "Criztiandev"
 ---

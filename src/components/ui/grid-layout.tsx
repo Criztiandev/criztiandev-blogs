@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ScrollArea } from "./scroll-area";
-import { AnimatedBlogCard } from "@/components/blog/animated-blog-card";
+import { AnimatedBlogCard } from "@/components/blocks/cards/animated-blog-card";
 
 type CardType = {
   title: string;
@@ -13,6 +13,7 @@ type CardType = {
   tags?: string[];
   date?: string;
   type?: "blog" | "project" | "aboutme";
+  isSkeleton?: boolean;
 };
 
 interface GridLayoutProps {
@@ -28,6 +29,7 @@ interface GridLayoutProps {
     date?: string;
     index: number;
     type: "blog" | "project" | "aboutme";
+    isSkeleton?: boolean;
   }>;
 }
 
@@ -50,6 +52,7 @@ export function GridLayout({ cards, type, CardComponent }: GridLayoutProps) {
               date={card.date}
               index={index}
               type={type || card.type || "blog"}
+              isSkeleton={card.isSkeleton}
             />
           ))}
         </div>

@@ -1,6 +1,5 @@
-import { TwoGrid } from "./two-grid";
+import { TwoGrid } from "../ui/two-grid";
 
 export const mdxComponents = {
   TwoGrid,
-  // Add more custom MDX components here as needed
 };
