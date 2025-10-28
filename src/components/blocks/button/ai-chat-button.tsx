@@ -40,7 +40,6 @@ export default function AIChatButton({ blogContent, blogTitle }: AIChatButtonPro
   );
 
   const remainingDaily = rateLimitData?.remainingDaily ?? 15;
-  const remainingMinute = rateLimitData?.remainingMinute ?? 3;
 
   // Record message mutation
   const recordMessageMutation = trpc.rateLimit.record.useMutation();
